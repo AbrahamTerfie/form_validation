@@ -5,7 +5,7 @@ import FormFields from '../widgets/forms/formfields';
 class User extends Component {
 
     state = {
-        formDaata: {
+        formData: {
             name: {
                 element: 'input',
                 value: '',
@@ -17,7 +17,8 @@ class User extends Component {
                     placeholder: 'enter your name '
                 },
                 validation: {
-                    requried: true
+                    requried: true,
+                    minLen: 5
                 },
                 valid: false,
                 touched: false,
@@ -34,9 +35,9 @@ class User extends Component {
                     placeholder: 'enter your last  name '
                 },
                 validation: {
-                    requried: false
+                    requried: true
                 },
-                valid: true,
+                valid: false,
                 touched: false,
                 validationMesage: ''
             },
@@ -49,7 +50,12 @@ class User extends Component {
                     name: 'message_input',
                     rows: 4,
                     cols: 36
-                }
+                },
+
+                validation: {
+                    requried: false
+                },
+                valid: true
 
             },
             age: {
@@ -70,7 +76,11 @@ class User extends Component {
                             val: '3', text: '30-40'
                         },
                     ]
-                }
+                },
+                validation: {
+                    required: false
+                },
+                valid: true
 
             }
         }
@@ -88,10 +98,22 @@ class User extends Component {
         event.preventDefault();
 
         let dataToSubmit = {};
+
+        let formIsValid = true;
+
         for (let key in this.state.formData) {
-            dataToSubmit[key] = this.state.formData[key].value
+            dataToSubmit[key] = this.state.formData[key].value;
         }
-        console.log(dataToSubmit)
+
+        for (let key in this.state.formData) {
+
+            formIsValid = this.state.formData[key].value && formIsValid;
+
+        }
+        if (formIsValid) {
+            console.log(dataToSubmit) 
+        }
+
 
     }
 
@@ -102,7 +124,8 @@ class User extends Component {
                 <form onSubmit={this.submitform}>
 
                     <FormFields
-                        formData={this.state.formDaata}
+                        formData={this.state.formData}
+                        onBlur={(newState) => this.updateForm(newState)}
                         change={(newState) => this.updateForm(newState)}
                     />
 
